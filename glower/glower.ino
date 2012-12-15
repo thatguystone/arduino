@@ -20,7 +20,7 @@ static int master = 0;
 static void randomize() {
 	int dir = lights[master].dir = random(2, 6);
 	
-	// Ensure that both other lights will change at the same time
+	// Ensure that both non-master lights will change at the same time (min == 1)
 	int reverse_dir = random(1, dir);
 	
 	int dirs[] = { -reverse_dir, -(dir - reverse_dir) };
@@ -34,26 +34,11 @@ static void randomize() {
 }
 
 void setup() {
-	// Serial.begin(9600);
 	randomize();
-	
-	// analogWrite(RED, 102);
-	// analogWrite(GREEN, 0);
-	// analogWrite(BLUE, 60);
 }
 
 void loop() {
 	int new_master = -1;
-	
-	// Serial.print("Vals: ");
-	// for (int i = 0; i < 3; i++) {
-	// 	Serial.print(" (");
-	// 	Serial.print(lights[i].dir);
-	// 	Serial.print(", ");
-	// 	Serial.print(lights[i].val);
-	// 	Serial.print(")");
-	// }
-	// Serial.println();
 	
 	for (int i = 0; i < 3; i++) {
 		analogWrite(lights[i].pin, lights[i].val);
