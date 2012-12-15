@@ -7,6 +7,8 @@
 #define GREEN 10
 #define BLUE 11
 
+#define MIN_LED_VAL 5
+
 struct light {
 	int pin;
 	int val;
@@ -30,8 +32,16 @@ static void delay(int ms) {
 	usleep(ms * 1000);
 }
 
+static void _dump() {
+	printf("Vals: ");
+	for (int i = 0; i < 3; i++) {
+		printf("%d ", lights[i].val);
+	}
+	printf("\n");
+}
+
 static void randomize() {
-	int dir = lights[master].dir = random_(2, 6);
+	int dir = lights[master].dir = random_(2, MIN_LED_VAL+1);
 	
 	// Ensure that both other lights will change at the same time
 	int reverse_dir = random_(1, dir);
@@ -54,30 +64,22 @@ static void randomize() {
 
 void setup() {
 	randomize();
-	
-	// analogWrite(RED, 102);
-	// analogWrite(GREEN, 0);
-	// analogWrite(BLUE, 60);
 }
 
 void loop() {
-	// printf("Vals: ");
-	// for (int i = 0; i < 3; i++) {
-	// 	printf("%d ", lights[i].val);
-	// }
-	// printf("\n");
+	// _dump();
 	
 	assert((lights[0].val + lights[1].val + lights[2].val) == 255);
 	
 	int new_master = -1;
 	for (int i = 0; i < 3; i++) {
-		// analogWrite(lights[i].pin, lights[i].val);
+		// analogWrite(lights[i].pin, lights[i].val < 0 ? 0 : lights[i].val);
 		lights[i].val += lights[i].dir;
 		
-		assert(lights[i].val >= 0);
-		assert(lights[i].val < 220);
+		assert(lights[i].val >= -MIN_LED_VAL);
+		assert(lights[i].val < 255);
 		
-		if (lights[i].val < 35) {
+		if (lights[i].val < MIN_LED_VAL) {
 			new_master = i;
 		}
 	}
