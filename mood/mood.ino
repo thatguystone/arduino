@@ -1,6 +1,6 @@
-#define RED 9
-#define GREEN 10
-#define BLUE 11
+#define RED 3
+#define GREEN 5
+#define BLUE 6
 
 #define STEP 5
 
